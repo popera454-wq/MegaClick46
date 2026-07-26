@@ -1,360 +1,291 @@
-"use client";
+// app/page.tsx
+import React from 'react';
 
-import { useState } from "react";
-import Link from "next/link";
-import { 
-  Gamepad2, 
-  Sparkles, 
-  Globe, 
-  FileText, 
-  Phone, 
-  HelpCircle, 
-  Users, 
-  Trophy, 
-  ChevronDown, 
-  BarChart3, 
-  Image as ImageIcon, 
-  CheckCircle2, 
-  Zap,
-  ArrowRight,
-  ArrowLeft
-} from "lucide-react";
+function IconSpark({ className = 'w-6 h-6' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M12 2l1.9 4.8L19 9l-4.8 1.9L12 16l-1.9-5.1L5 9l5.1-2.2L12 2z" fill="url(#g)"/>
+      <defs>
+        <linearGradient id="g" x1="0" x2="1">
+          <stop offset="0" stopColor="#7c3aed"/>
+          <stop offset="1" stopColor="#06b6d4"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
 
 export default function HomePage() {
-  const [lang, setLang] = useState<"he" | "en">("he");
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-
-  const isHebrew = lang === "he";
-
-  const toggleFaq = (index: number) => {
-    setOpenFaq(openFaq === index ? null : index);
-  };
-
   return (
-    <div className={`min-h-screen bg-slate-950 text-slate-100 ${isHebrew ? "rtl" : "ltr"}`} dir={isHebrew ? "rtl" : "ltr"}>
-      
-      {/* 1. Header / Navbar */}
-      <header className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="bg-gradient-to-tr from-indigo-500 to-purple-500 p-2 rounded-xl text-white shadow-lg shadow-indigo-500/30">
-              <Zap className="h-6 w-6" />
+    <div className="min-h-screen flex flex-col">
+      {/* HEADER */}
+      <header className="sticky top-0 z-50 backdrop-blur bg-slate-900/60 border-b border-slate-800">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <div className="rounded-2xl p-2 bg-gradient-to-br from-indigo-600 to-rose-500 shadow-xl">
+                <IconSpark className="w-7 h-7" />
+              </div>
+              <div className="text-lg font-extrabold tracking-tight">MegaClick</div>
             </div>
-            <span className="text-2xl font-black bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              MegaClick
-            </span>
+
+            <nav className="hidden lg:flex items-center gap-6 text-sm" aria-label="ניווט ראשי">
+              <a href="#how-it-works" className="nav-link">איך זה עובד?</a>
+              <a href="#slide-types" className="nav-link">סוגי שאלות</a>
+              <a href="#features" className="nav-link">יכולות מיוחדות</a>
+              <a href="#ivr" className="nav-link">השתתפות בטלפון</a>
+              <a href="#faq" className="nav-link">שאלות ותשובות</a>
+            </nav>
           </div>
 
-          {/* Navigation Links */}
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
-            <a href="#how-it-works" className="hover:text-indigo-400 transition-colors">
-              {isHebrew ? "איך זה עובד?" : "How it Works"}
-            </a>
-            <a href="#slide-types" className="hover:text-indigo-400 transition-colors">
-              {isHebrew ? "סוגי שאלות" : "Slide Types"}
-            </a>
-            <a href="#ivr" className="hover:text-indigo-400 transition-colors">
-              {isHebrew ? "השתתפות בטלפון" : "Phone Participation"}
-            </a>
-            <a href="#faq" className="hover:text-indigo-400 transition-colors">
-              {isHebrew ? "שאלות ותשובות" : "FAQ"}
-            </a>
-          </nav>
-
-          {/* Actions & Lang Switcher */}
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => setLang(isHebrew ? "en" : "he")}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold transition"
-            >
-              <Globe className="h-4 w-4 text-indigo-400" />
-              <span>{isHebrew ? "EN" : "עברית"}</span>
+            <button className="lang-switch group" aria-label="החלפת שפה">
+              <span className="text-sm">🇮🇱</span>
+              <span className="mx-1 text-xs text-slate-400">/</span>
+              <span className="text-sm">🇬🇧</span>
             </button>
 
-            <Link
-              href="/certificate"
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 transition"
-            >
-              <FileText className="h-4 w-4 text-emerald-400" />
-              <span>{isHebrew ? "אחזור תעודה" : "Certificates"}</span>
-            </Link>
+            <a className="btn-solid hidden sm:inline-flex" href="/certificate-retrieve" aria-label="אחזור תעודה">
+              <span className="text-lg">📄</span>
+              <span className="mr-2">אחזור תעודה</span>
+            </a>
 
-            <Link
-              href="/join"
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white text-xs font-bold shadow-md shadow-emerald-500/20 transition"
-            >
-              <Gamepad2 className="h-4 w-4" />
-              <span>{isHebrew ? "הצטרף למשחק" : "Join Game"}</span>
-            </Link>
+            <a className="btn-primary" href="/join" aria-label="הצטרף למשחק">
+              <span>🎮</span>
+              <span className="mr-2">הצטרף למשחק</span>
+            </a>
 
-            <Link
-              href="/login"
-              className="hidden lg:flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition shadow-md shadow-indigo-600/20"
-            >
-              <span>{isHebrew ? "התחברות / הרשמה" : "Login / Register"}</span>
-            </Link>
+            <a className="btn-ghost hidden sm:inline-flex" href="/auth" aria-label="התחברות">
+              התחברות / הרשמה
+            </a>
           </div>
         </div>
       </header>
 
-      {/* 2. Hero Section */}
-      <section className="relative overflow-hidden pt-16 pb-20 md:pt-24 md:pb-28">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900/30 via-slate-950 to-slate-950 pointer-events-none"></div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold mb-6">
-            <Sparkles className="h-4 w-4 text-indigo-400" />
-            <span>{isHebrew ? "פלטפורמת הטריוויה והסקרים של הדור הבא" : "Next Generation Live Quiz & Poll Platform"}</span>
-          </div>
-
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 leading-tight">
-            {isHebrew ? (
-              <>יוצרים. משחקים. <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">מנצחים!</span></>
-            ) : (
-              <>Create. Play. <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Win!</span></>
-            )}
-          </h1>
-
-          <p className="max-w-3xl mx-auto text-lg sm:text-xl text-slate-300 mb-10 leading-relaxed">
-            {isHebrew
-              ? "הפכו כל אירוע, שיעור או פגישה לניסיון חווייתי וסוחף בזמן אמת. תמיכה מלאה בהשתתפות דרך הטלפון הנייד, הנייד הכשר או חיוג קולי!"
-              : "Turn any event, class or meeting into a real-time engaging experience. Full support for smartphone or dial-in phone participation!"}
-          </p>
-
-          <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
-            <Link
-              href="/login"
-              className="flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600 text-white font-bold text-lg shadow-xl shadow-purple-500/25 transition transform hover:-translate-y-0.5"
-            >
-              <Sparkles className="h-5 w-5" />
-              <span>{isHebrew ? "צור משחק בחינם" : "Create Free Game"}</span>
-              {isHebrew ? <ArrowLeft className="h-5 w-5" /> : <ArrowRight className="h-5 w-5" />}
-            </Link>
-
-            <Link
-              href="/join"
-              className="flex items-center gap-2 px-6 py-4 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-base transition"
-            >
-              <Gamepad2 className="h-5 w-5 text-emerald-400" />
-              <span>{isHebrew ? "הצטרף למשחק פעיל" : "Join Game"}</span>
-            </Link>
-
-            <Link
-              href="/certificate"
-              className="flex items-center gap-2 px-6 py-4 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-base transition"
-            >
-              <FileText className="h-5 w-5 text-amber-400" />
-              <span>{isHebrew ? "אחזור תעודה משיחה קולית" : "Get Certificate"}</span>
-            </Link>
-          </div>
-
-          {/* Hero Mockup Frame */}
-          <div className="relative mx-auto max-w-5xl rounded-2xl border border-slate-800 bg-slate-900/60 p-4 shadow-2xl backdrop-blur-md">
-            <div className="aspect-video rounded-xl bg-slate-950 flex flex-col items-center justify-center relative overflow-hidden border border-slate-800/80">
-              <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 via-purple-500/5 to-pink-500/10"></div>
-              <Trophy className="h-20 w-20 text-amber-400 mb-4 animate-bounce" />
-              <h3 className="text-2xl font-black text-white mb-2">
-                {isHebrew ? "פודיום המובילים בזמן אמת!" : "Live Leaderboard Podium!"}
-              </h3>
-              <p className="text-slate-400 text-sm max-w-md">
-                {isHebrew 
-                  ? "התשובות מעודכנות ב-0 דילוי בסנכרון מלא בין הטלפונים הכשרים והמסך הראשי!" 
-                  : "Zero latency updates syncing web users and phone callers instantly!"}
-              </p>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* 3. How It Works */}
-      <section id="how-it-works" className="py-20 bg-slate-900/50 border-y border-slate-800/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
-              {isHebrew ? "3 צעדים פשוטים למשחק מושלם" : "3 Simple Steps to Play"}
-            </h2>
-            <p className="text-slate-400 max-w-2xl mx-auto">
-              {isHebrew ? "כל אחד יכול להפעיל משחק סוחף תוך פחות מ-2 דקות" : "Anyone can run an engaging game in under 2 minutes"}
+      {/* HERO */}
+      <main className="flex-1">
+        <section className="max-w-7xl mx-auto px-6 py-16 grid lg:grid-cols-2 gap-12 items-center">
+          <div className="text-right space-y-6">
+            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
+              יוצרים. משחקים. מנצחים!
+            </h1>
+            <p className="text-slate-300 max-w-xl">
+              פלטפורמת המשחקים, הטריוויה והסקרים האינטראקטיבית המתקדמת בעולם.
+              הפכו כל אירוע, שיעור או פגישה לניסיון חווייתי וסוחף בזמן אמת.
+              תמיכה מלאה בהשתתפות דרך הטלפון הנייד, הנייד הכשר או חיוג קולי.
             </p>
+
+            <div className="flex flex-wrap justify-end gap-3">
+              <a className="cta-main" href="/create">
+                <span className="text-xl">🚀</span>
+                <span className="mr-2">צור משחק בחינם</span>
+              </a>
+
+              <a className="cta-secondary" href="/join">
+                <span>📱</span>
+                <span className="mr-2">הצטרף למשחק פעיל</span>
+              </a>
+
+              <a className="cta-ghost" href="/certificate-retrieve">
+                <span>📄</span>
+                <span className="mr-2">אחזור תעודה משיחה קולית</span>
+              </a>
+            </div>
+
+            <div className="flex justify-end">
+              <div className="text-xs text-slate-400">Zero Latency • Supabase Realtime</div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-slate-900 p-8 rounded-2xl border border-slate-800 text-center relative">
-              <div className="w-14 h-14 mx-auto mb-6 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 text-2xl font-black">
-                1
+          <div className="relative">
+            <div className="rounded-3xl p-6 bg-gradient-to-br from-slate-800/80 to-slate-900 border border-slate-700 shadow-2xl overflow-hidden">
+              <div className="flex items-center justify-between mb-4">
+                <div className="text-xs text-slate-400">Live • MegaClick</div>
+                <div className="text-xs text-emerald-400 font-semibold">Realtime</div>
               </div>
-              <h3 className="text-xl font-bold text-white mb-3">
-                {isHebrew ? "יוצרים ומעצבים" : "Create & Design"}
-              </h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                {isHebrew 
-                  ? "בונים חידון בקלות, מוסיפים שאלות, נעזרים ב-AI החינמי שלנו או מייבאים קובץ Excel מוכן בלחיצה."
-                  : "Build a quiz, add questions, use free AI generator or import Excel files instantly."}
-              </p>
-            </div>
 
-            <div className="bg-slate-900 p-8 rounded-2xl border border-slate-800 text-center relative">
-              <div className="w-14 h-14 mx-auto mb-6 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-2xl font-black">
-                2
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3">
-                {isHebrew ? "משתפים ומחברים" : "Share & Join"}
-              </h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                {isHebrew 
-                  ? "המשתתפים מצטרפים בסריקת קוד QR, קישור דפדפן, או בחיוג קולי מהטלפון הכשר!"
-                  : "Players join via QR code, direct URL, or calling in via telephone!"}
-              </p>
-            </div>
+              <div className="rounded-xl bg-gradient-to-b from-slate-900 to-slate-800 p-4 grid grid-cols-2 gap-4">
+                <div className="col-span-2 flex items-center justify-between">
+                  <div className="text-sm font-semibold">לוח מובילים</div>
+                  <div className="text-xs text-slate-400">עדכון בזמן אמת</div>
+                </div>
 
-            <div className="bg-slate-900 p-8 rounded-2xl border border-slate-800 text-center relative">
-              <div className="w-14 h-14 mx-auto mb-6 rounded-xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-pink-400 text-2xl font-black">
-                3
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3">
-                {isHebrew ? "מפעילים וחוגגים" : "Play & Win"}
-              </h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                {isHebrew 
-                  ? "מריצים את המשחק בלייב על המסך, צופים בתשובות בזמן אמת ומכריזים על הזוכים בפודיום חגיגי."
-                  : "Host live on screen, watch answers updated in real-time and celebrate winners on the podium."}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. Slide Types */}
-      <section id="slide-types" className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
-              {isHebrew ? "עולם שלם של סוגי שאלות" : "Versatile Question Types"}
-            </h2>
-            <p className="text-slate-400 max-w-2xl mx-auto">
-              {isHebrew ? "בחרו את סוג השקופית המתאים ביותר לחוויה שלכם" : "Choose the best slide layout for your experience"}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800">
-              <HelpCircle className="h-10 w-10 text-indigo-400 mb-4" />
-              <h3 className="text-lg font-bold text-white mb-2">{isHebrew ? "❓ טריוויה אמריקאית" : "❓ Trivia Quiz"}</h3>
-              <p className="text-slate-400 text-sm">{isHebrew ? "שאלות אמריקאיות מרובות תשובות עם ניקוד מבוסס זמן ומהירות." : "Multiple choice questions with speed-based points system."}</p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800">
-              <BarChart3 className="h-10 w-10 text-emerald-400 mb-4" />
-              <h3 className="text-lg font-bold text-white mb-2">{isHebrew ? "📊 סקר והצבעה" : "📊 Live Poll"}</h3>
-              <p className="text-slate-400 text-sm">{isHebrew ? "איסוף דעות, הצבעות ומשדרי עמדות בזמן אמת ללא ניקוד." : "Collect live opinions and votes displayed instantly on graph charts."}</p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800">
-              <ImageIcon className="h-10 w-10 text-purple-400 mb-4" />
-              <h3 className="text-lg font-bold text-white mb-2">{isHebrew ? "🖼️ תשובה בתמונה" : "🖼️ Image Choices"}</h3>
-              <p className="text-slate-400 text-sm">{isHebrew ? "השחקנים בוחרים את התשובה הנכונה מתוך גלריית תמונות מרהיבה." : "Players select correct answers from visual photo options."}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Phone / IVR Highlight */}
-      <section id="ivr" className="py-20 bg-gradient-to-b from-indigo-950/40 to-slate-950 border-t border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-indigo-900/60 to-purple-900/60 rounded-3xl p-8 sm:p-12 border border-indigo-500/30 flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold mb-4">
-                <Phone className="h-3.5 w-3.5" />
-                <span>{isHebrew ? "ייחודי ל-MegaClick!" : "Exclusive Feature!"}</span>
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
-                {isHebrew ? "אין אינטרנט? משחקים מהטלפון הכשר!" : "Play via Dial-In Phone Call!"}
-              </h2>
-              <p className="text-slate-300 text-base mb-6 leading-relaxed">
-                {isHebrew 
-                  ? "המערכת שלנו מחוברת ישירות לרשת הטלפוניה. מחייגים למספר המערכת 077-2250449, מקישים את קוד המשחק ועונים באמצעות מקשי הטלפון (1, 2, 3...)!"
-                  : "Dial 077-2250449, enter Game PIN and answer using phone keypad in real-time!"}
-              </p>
-              <Link
-                href="/certificate"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold transition"
-              >
-                <FileText className="h-5 w-5" />
-                <span>{isHebrew ? "שיחקת מהטלפון? לחץ לאחזור תעודה" : "Get Phone Game Certificate"}</span>
-              </Link>
-            </div>
-            <div className="bg-slate-900/90 p-6 rounded-2xl border border-slate-700 text-center w-full md:w-auto">
-              <p className="text-xs text-slate-400 mb-2">{isHebrew ? "מספר מערכת קולית:" : "IVR Phone Number:"}</p>
-              <p className="text-3xl font-black text-emerald-400 tracking-wider dir-ltr mb-4">077-2250449</p>
-              <div className="text-xs text-slate-400 flex items-center justify-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-                <span>{isHebrew ? "סנכרון מלא עם השרת בלייב" : "Real-time Live Sync"}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. FAQ Section */}
-      <section id="faq" className="py-20 border-t border-slate-800">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-extrabold text-white mb-4">
-              {isHebrew ? "שאלות ותשובות נפוצות" : "Frequently Asked Questions"}
-            </h2>
-          </div>
-
-          <div className="space-y-4">
-            {[
-              {
-                q: isHebrew ? "האם השימוש במערכת הוא בחינם?" : "Is MegaClick free to use?",
-                a: isHebrew ? "כן! ניתן להירשם, ליצור חידונים, להשתמש במחולל ה-AI ולהפעיל משחקים בחינם." : "Yes! You can sign up, build quizzes, use AI generators, and host games for free."
-              },
-              {
-                q: isHebrew ? "איך עובדת ההשתתפות דרך הטלפון הכשר?" : "How does kosher phone participation work?",
-                a: isHebrew ? "המשתתפים מחייגים ל-077-2250449, מקישים את קוד המשחק ועונים במקשים. התשובות מסתנכרנות מיד במסך המנחה!" : "Players dial 077-2250449, enter Game PIN and answer with phone buttons. Results sync live!"
-              },
-              {
-                q: isHebrew ? "איך משיגים תעודת השתתפות?" : "How to retrieve a game certificate?",
-                a: isHebrew ? "בסיום המשחק הקולי המערכת מקריאה קוד אישי. נכנסים לעמוד 'אחזור תעודה' באתר ומורידים קובץ PDF מעוצב." : "At the end of a phone game, enter your personal code in our Certificate Retrieval page to download PDF."
-              }
-            ].map((item, idx) => (
-              <div key={idx} className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-                <button
-                  onClick={() => toggleFaq(idx)}
-                  className="w-full p-5 text-start font-bold text-white flex justify-between items-center hover:bg-slate-800/50 transition"
-                >
-                  <span>{item.q}</span>
-                  <ChevronDown className={`h-5 w-5 text-slate-400 transition-transform ${openFaq === idx ? "rotate-180" : ""}`} />
-                </button>
-                {openFaq === idx && (
-                  <div className="p-5 pt-0 text-slate-400 text-sm leading-relaxed border-t border-slate-800/50">
-                    {item.a}
+                <div className="col-span-2 grid grid-cols-3 gap-3">
+                  <div className="podium first">
+                    <div className="rank">1</div>
+                    <div className="name">אור</div>
+                    <div className="score">98</div>
                   </div>
-                )}
+                  <div className="podium second">
+                    <div className="rank">2</div>
+                    <div className="name">נועה</div>
+                    <div className="score">92</div>
+                  </div>
+                  <div className="podium third">
+                    <div className="rank">3</div>
+                    <div className="name">דוד</div>
+                    <div className="score">88</div>
+                  </div>
+                </div>
+
+                <div className="col-span-2 mt-3">
+                  <div className="phone-mock mx-auto w-56 h-96 rounded-2xl bg-slate-900 border border-slate-700 p-3 shadow-lg relative">
+                    <div className="text-[10px] text-slate-400 text-center mb-2">Player View • חיוג קולי</div>
+                    <div className="space-y-2">
+                      <button className="answer-btn bg-emerald-500">תשובה 1</button>
+                      <button className="answer-btn bg-sky-500">תשובה 2</button>
+                      <button className="answer-btn bg-violet-500">תשובה 3</button>
+                      <button className="answer-btn bg-rose-500">תשובה 4</button>
+                    </div>
+                    <div className="absolute bottom-3 left-0 right-0 text-[11px] text-center text-slate-400">
+                      תמיכה בחיוג קולי וטלפונים כשרים
+                    </div>
+                  </div>
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* 7. Footer */}
-      <footer className="bg-slate-900 border-t border-slate-800 py-12 text-slate-400 text-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-2">
-            <Zap className="h-5 w-5 text-indigo-400" />
-            <span className="font-bold text-white text-lg">MegaClick</span>
-            <span>© 2026. {isHebrew ? "כל הזכויות שמורות." : "All rights reserved."}</span>
+              <div className="mt-4 text-xs text-slate-400">פודיום מנצחים עם אפקטים וחגיגות</div>
+            </div>
+
+            <div className="absolute -right-6 -bottom-6 animate-float hidden md:block">
+              <div className="w-40 h-40 rounded-full bg-gradient-to-br from-indigo-500 to-rose-500 opacity-20 blur-2xl"></div>
+            </div>
           </div>
-          <div className="flex items-center gap-6">
-            <Link href="/join" className="hover:text-white transition">{isHebrew ? "הצטרף למשחק" : "Join Game"}</Link>
-            <Link href="/certificate" className="hover:text-white transition">{isHebrew ? "אחזור תעודה" : "Certificates"}</Link>
-            <Link href="/login" className="hover:text-white transition">{isHebrew ? "התחברות" : "Login"}</Link>
+        </section>
+
+        {/* HOW IT WORKS */}
+        <section id="how-it-works" className="max-w-7xl mx-auto px-6 py-12">
+          <h2 className="text-2xl font-bold text-right">3 צעדים פשוטים למשחק מושלם</h2>
+          <div className="mt-6 grid md:grid-cols-3 gap-6">
+            <article className="feature-card">
+              <div className="feature-icon">🛠️</div>
+              <h3 className="feature-title">יוצרים ומעצבים</h3>
+              <p className="feature-desc">
+                בונים חידון בתוך דקות. מוסיפים שאלות, סקרים ומדיה. מחולל AI וייבוא Excel בלחיצה.
+              </p>
+            </article>
+
+            <article className="feature-card">
+              <div className="feature-icon">📲</div>
+              <h3 className="feature-title">משתפים ומחברים</h3>
+              <p className="feature-desc">
+                הצטרפות דרך QR, קישור או חיוג טלפוני. מתאים לטלפונים כשרים.
+              </p>
+            </article>
+
+            <article className="feature-card">
+              <div className="feature-icon">🏆</div>
+              <h3 className="feature-title">מפעילים וחוגגים</h3>
+              <p className="feature-desc">
+                ריצת המשחק בלייב, לוח מובילים דינמי ופודיום מנצחים.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        {/* SLIDE TYPES */}
+        <section id="slide-types" className="max-w-7xl mx-auto px-6 py-12">
+          <h2 className="text-2xl font-bold text-right">עולם שלם של אפשרויות תוכן</h2>
+          <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div className="slide-type">❓ טריוויה<div className="text-xs text-slate-400">ניקוד מהירות, מדיה</div></div>
+            <div className="slide-type">📊 סקר<div className="text-xs text-slate-400">גרפים חיים</div></div>
+            <div className="slide-type">🖼️ תשובה בתמונה<div className="text-xs text-slate-400">גלריה מעוצבת</div></div>
+            <div className="slide-type">📝 שקופית טקסט<div className="text-xs text-slate-400">הסברים והנחיות</div></div>
+            <div className="slide-type">🎬 שקופית מדיה<div className="text-xs text-slate-400">YouTube, תמונות, מוזיקה</div></div>
+          </div>
+        </section>
+
+        {/* FEATURES */}
+        <section id="features" className="max-w-7xl mx-auto px-6 py-12">
+          <h2 className="text-2xl font-bold text-right">מה הופך את MegaClick לבלתי נצחית?</h2>
+          <div className="mt-6 grid md:grid-cols-3 gap-6">
+            <div className="card-feature">🤖 מחולל AI חכם וחינמי</div>
+            <div className="card-feature">📞 השתתפות טלפונית קולית (IVR)</div>
+            <div className="card-feature">📊 ייבוא וייצוא מ-Excel</div>
+            <div className="card-feature">🎨 מותג ועיצוב אישי</div>
+            <div className="card-feature">⚡ סנכרון בזמן אמת</div>
+            <div className="card-feature">📄 הפקת תעודות PDF אישיות</div>
+          </div>
+        </section>
+
+        {/* IVR */}
+        <section id="ivr" className="max-w-7xl mx-auto px-6 py-12">
+          <h2 className="text-2xl font-bold text-right">אין לכם אינטרנט? אין בעיה! משחקים מהטלפון</h2>
+          <div className="mt-4 grid md:grid-cols-2 gap-6">
+            <div className="text-sm text-slate-300">
+              <p>מחייגים למספר המערכת: <strong>077-2250449</strong></p>
+              <p>מקישים את קוד המשחק. עונים באמצעות מקשי הטלפון.</p>
+              <p>בסיום המשחק, המערכת מקריאה קוד אחזור אישי.</p>
+            </div>
+            <div className="flex items-center">
+              <a className="btn-solid w-full justify-center" href="/certificate-retrieve">
+                <span>📄</span>
+                <span className="mr-2">מעבר לדף אחזור תעודה</span>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section id="faq" className="max-w-7xl mx-auto px-6 py-12">
+          <h2 className="text-2xl font-bold text-right">כל מה שרציתם לדעת על MegaClick</h2>
+          <div className="mt-6 space-y-3">
+            <details className="faq-item">
+              <summary>האם השימוש במערכת הוא בחינם?</summary>
+              <p>כן. ניתן להירשם, ליצור חידונים ולהשתמש במחולל ה‑AI בחינם.</p>
+            </details>
+
+            <details className="faq-item">
+              <summary>כמה משתתפים יכולים לשחק בו-זמנית?</summary>
+              <p>תמיכה במאות ועד אלפי משתתפים בהתאם לתוכנית ותשתית הענן.</p>
+            </details>
+
+            <details className="faq-item">
+              <summary>איך עובד מנגנון אחזור התעודות?</summary>
+              <p>בסיום המשחק הקולי המערכת מקריאה קוד אישי. מזינים את הקוד באתר ומורידים PDF מעוצב.</p>
+            </details>
+          </div>
+        </section>
+      </main>
+
+      {/* FOOTER */}
+      <footer className="bg-slate-900 border-t border-slate-800">
+        <div className="max-w-7xl mx-auto px-6 py-8 grid md:grid-cols-4 gap-6 text-sm text-slate-300">
+          <div className="text-right">
+            <div className="flex items-center justify-end gap-2">
+              <div className="font-bold">MegaClick</div>
+              <div>⚡</div>
+            </div>
+            <p className="mt-2">פלטפורמת המשחקים והטריוויה המובילה ליצירת חוויה אינטראקטיבית בכל מקום.</p>
+          </div>
+
+          <div className="text-right">
+            <h4 className="font-semibold">ניווט מהיר</h4>
+            <ul className="mt-2 space-y-1">
+              <li>דף הבית</li>
+              <li>הצטרפות למשחק</li>
+              <li>אחזור תעודה</li>
+              <li>צור משחק</li>
+              <li>אזור אישי</li>
+            </ul>
+          </div>
+
+          <div className="text-right">
+            <h4 className="font-semibold">טלפוניה ויצירת קשר</h4>
+            <p className="mt-2">מספר מערכת IVR: 077-2250449</p>
+            <p>אימייל תמיכה: support@megaclick.com</p>
+          </div>
+
+          <div className="text-right">
+            <h4 className="font-semibold">משפטי ומערכת</h4>
+            <p className="mt-2">תנאי שימוש</p>
+            <p>מדיניות פרטיות</p>
+            <p>נגישות</p>
           </div>
         </div>
+
+        <div className="text-center text-xs text-slate-500 py-4">© 2026 MegaClick. כל הזכויות שמורות.</div>
       </footer>
-
     </div>
   );
 }
